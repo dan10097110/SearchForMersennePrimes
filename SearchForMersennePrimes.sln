@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchForMersennePrimes", "SearchForMersennePrimes\SearchForMersennePrimes.csproj", "{F6985D0F-8B4A-4896-94E7-A7E30DA7F31D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F6985D0F-8B4A-4896-94E7-A7E30DA7F31D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6985D0F-8B4A-4896-94E7-A7E30DA7F31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6985D0F-8B4A-4896-94E7-A7E30DA7F31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6985D0F-8B4A-4896-94E7-A7E30DA7F31D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {390A02D9-76F9-47B7-BC20-D50893960B6F}
+	EndGlobalSection
+EndGlobal
