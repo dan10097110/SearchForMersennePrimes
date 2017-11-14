@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SearchForMersennePrimes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Search for Mersenne primes" Height="397" Width="404" Topmost="True" Loaded="Window_Loaded" Closing="Window_Closing" MinWidth="404" MinHeight="397">
     <Grid>
-        
+        <ListBox x:Name="listBox" HorizontalAlignment="Left" Width="143" SelectionChanged="listBox_SelectionChanged"/>
+        <Button x:Name="buttonStartStop" Content="Start" HorizontalAlignment="Left" Margin="143,10,0,0" Width="63" Click="buttonStartStop_Click" Height="20" VerticalAlignment="Top"/>
+        <Button x:Name="buttonPauseContinue" Content="Pause" HorizontalAlignment="Left" Margin="143,30,0,0" VerticalAlignment="Top" Width="63" Click="buttonPauseContinue_Click"/>
+        <Button x:Name="buttonSaveLoad" Content="Load" HorizontalAlignment="Left" Margin="143,55,0,0" VerticalAlignment="Top" Width="63" Click="buttonSaveLoad_Click"/>
+        <Button x:Name="buttonDelete" Content="Delete" Margin="143,75,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="63" Click="buttonDelete_Click"/>
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="211,12,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Start exp"/><Run Text="o"/><Run Text="nent"/><Run Text=":"/></TextBlock>
+        <TextBlock x:Name="textBlock1" HorizontalAlignment="Left" Margin="218,32,0,0" TextWrapping="Wrap" Text="Thread count:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlock2" HorizontalAlignment="Left" Margin="231,57,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Save name"/><Run Text=":"/></TextBlock>
+        <TextBlock x:Name="textBlockPrimeCount" HorizontalAlignment="Left" Margin="148,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Mersenn"/><Run Text="e"/><Run Text=" prime count:"/></TextBlock>
+        <TextBlock x:Name="textBlockTime" Margin="148,0,0,10" TextWrapping="Wrap" HorizontalAlignment="Left" Width="238" Height="16" VerticalAlignment="Bottom" FontWeight="Bold"><Run Text="Tim"/><Run Text="e"/></TextBlock>
+        <TextBlock x:Name="textBlockExponent" HorizontalAlignment="Left" Margin="148,247,0,0" TextWrapping="Wrap" Text="Exponent:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockTotalTime" HorizontalAlignment="Left" Margin="148,268,0,0" TextWrapping="Wrap" Text="Total time:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockTestTime" HorizontalAlignment="Left" Margin="148,289,0,0" TextWrapping="Wrap" Text="Test time:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockExplorationDate" HorizontalAlignment="Left" Margin="148,310,0,0" TextWrapping="Wrap" Text="Exploration date:" VerticalAlignment="Top"/>
+        <TextBlock x:Name="textBlockSelectedPrime" HorizontalAlignment="Left" Margin="148,226,0,0" TextWrapping="Wrap" Text="Selected Prime:" VerticalAlignment="Top" FontWeight="Bold" TextDecorations="Underline"/>
+        <TextBlock x:Name="textBlockCPU" HorizontalAlignment="Left" Margin="148,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" TextDecorations="{x:Null}"><Run Text="CPU"/><Run Text=":"/></TextBlock>
+        <TextBlock x:Name="textBlockRam" HorizontalAlignment="Left" Margin="148,142,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="Ram:"/>
+        <TextBlock x:Name="textBlockUtilisation" HorizontalAlignment="Left" Margin="148,100,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" TextDecorations="Underline"><Run Text="U"/><Run Text="tilisation"/><Run Text=":"/></TextBlock>
+        <TextBlock x:Name="textBlockCurrentlyTested" HorizontalAlignment="Left" Margin="148,184,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Currently tested"/><Run Text=":"/></TextBlock>
+        <TextBlock x:Name="textBlockState" HorizontalAlignment="Left" Margin="148,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontWeight="Bold" TextDecorations="Underline"><Run Text="S"/><Run Text="tate"/><Run Text=":"/></TextBlock>
+        <TextBlock x:Name="textBlockVersion" Margin="302,0,10,11" TextWrapping="Wrap" Text="Version" VerticalAlignment="Bottom" TextAlignment="Right" FontSize="9"/>
+        <TextBox x:Name="textBoxStartExponent" Margin="296,11,10,0" TextWrapping="Wrap" Height="18" VerticalAlignment="Top" LostFocus="textBoxStartExponent_LostFocus" MaxLines="1"/>
+        <TextBox x:Name="textBoxThreadCount" Margin="296,31,10,0" TextWrapping="Wrap" VerticalAlignment="Top" MaxLines="1" LostFocus="textBoxThreadCount_LostFocus"/>
+        <TextBox x:Name="textBoxSaveName" Margin="296,56,10,0" TextWrapping="Wrap" VerticalAlignment="Top" MaxLines="1"/>
+        <TextBox x:Name="textBoxCurrentlyTested" Margin="296,183,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxPrimeCount" Margin="296,204,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxCPUUtilisation" Margin="296,120,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxRamUtilisation" Margin="296,141,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxExponent" Margin="296,246,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxTotalTime" Margin="296,267,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxTestTime" Margin="296,288,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <TextBox x:Name="textBoxExplorationDate" Margin="296,309,10,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" MaxLines="1"/>
+        <ComboBox x:Name="comboBoxSaveName" Margin="296,55,10,0" VerticalAlignment="Top" Height="20"/>
     </Grid>
 </Window>
