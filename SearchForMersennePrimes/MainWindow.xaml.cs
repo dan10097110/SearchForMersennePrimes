@@ -1,11 +1,11 @@
-﻿using System;
+﻿using DLib.Math.Seeker;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
-using DLib.Math.Seeker;
 
 namespace SearchForMersennePrimes
 {
@@ -15,16 +15,47 @@ namespace SearchForMersennePrimes
         bool closing;
         const string savePath = @"C:\Users\dan24\OneDrive\Dokumente\Mathematik\Mersenne-Primzahlen\SFMPSaves";
 
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        public MainWindow() => InitializeComponent();
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             closing = false;
             mersennePrimeSeeker = new MersennePrime();
-            new Thread(GuiUpdateRoutine).Start();
+            new Thread(() =>
+            {
+                ulong totalPhysicalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
+                PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true), ramCounter = new PerformanceCounter("Memory", "Available Bytes", true);
+                while (!closing)
+                {
+                    string cpuUtilisation = ((int)cpuCounter.NextValue()).ToString() + "%", ramUtilisation = (int)((1 - ramCounter.NextValue() / totalPhysicalMemory) * 100) + "%";
+                    Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                    {
+                        textBoxCPUUtilisation.Text = cpuUtilisation;
+                        textBoxRamUtilisation.Text = ramUtilisation;
+                        if (mersennePrimeSeeker.Running && !mersennePrimeSeeker.Paused)
+                        {
+                            textBlockTime.Text = new TimeSpan(0, 0, (int)mersennePrimeSeeker.Time.TotalSeconds).ToString();
+                            textBoxCurrentlyTested.Text = "2^" + mersennePrimeSeeker.NextExponent + "-1";
+                            if (listBox.Items.Count != mersennePrimeSeeker.MersennePrimeCount)
+                            {
+                                listBox.Items.Clear();
+                                foreach (var exponent in mersennePrimeSeeker.MersennePrimeExponents)
+                                    listBox.Items.Add("2^" + exponent + "-1 is prime");
+                                textBoxPrimeCount.Text = mersennePrimeSeeker.MersennePrimeCount.ToString();
+                            }
+                            if (listBox.SelectedIndex == -1 && mersennePrimeSeeker.MersennePrimeCount != 0)
+                            {
+                                var mersennePrime = mersennePrimeSeeker.MersennePrimes.Last();
+                                textBoxExplorationDate.Text = mersennePrime.explorationDate.ToString();
+                                textBoxTotalTime.Text = mersennePrime.totalTime.ToString();
+                                textBoxTestTime.Text = mersennePrime.testTime.ToString();
+                                textBoxExponent.Text = mersennePrime.exponent.ToString();
+                            }
+                        }
+                    }));
+                    Thread.Sleep(1000);
+                }
+            }).Start();
             textBoxStartExponent.Text = "5";
             textBoxThreadCount.Text = Environment.ProcessorCount.ToString();
             textBlockVersion.Text = MersennePrime.version;
@@ -99,42 +130,6 @@ namespace SearchForMersennePrimes
                 textBoxThreadCount.Text = Environment.ProcessorCount.ToString();
                 mersennePrimeSeeker.ThreadCount = (byte)Environment.ProcessorCount;
                 MessageBox.Show("The thread count can not be set. Maybe the count is not a number or it is too large. It will be set on default.", "Input error");
-            }
-        }
-
-        void GuiUpdateRoutine()
-        {
-            ulong totalPhysicalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
-            PerformanceCounter cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true), ramCounter = new PerformanceCounter("Memory", "Available Bytes", true);
-            while (!closing)
-            {
-                string cpuUtilisation = ((int)cpuCounter.NextValue()).ToString() + "%", ramUtilisation = (int)((1 - ramCounter.NextValue() / totalPhysicalMemory) * 100) + "%";
-                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-                {
-                    textBoxCPUUtilisation.Text = cpuUtilisation;
-                    textBoxRamUtilisation.Text = ramUtilisation;
-                    if (mersennePrimeSeeker.Running && !mersennePrimeSeeker.Paused)
-                    {
-                        textBlockTime.Text = new TimeSpan(0, 0, (int)mersennePrimeSeeker.Time.TotalSeconds).ToString();
-                        textBoxCurrentlyTested.Text = "2^" + mersennePrimeSeeker.NextExponent + "-1";
-                        if (listBox.Items.Count != mersennePrimeSeeker.MersennePrimeCount)
-                        {
-                            listBox.Items.Clear();
-                            foreach (var exponent in mersennePrimeSeeker.MersennePrimeExponents)
-                                listBox.Items.Add("2^" + exponent + "-1 is prime");
-                            textBoxPrimeCount.Text = mersennePrimeSeeker.MersennePrimeCount.ToString();
-                        }
-                        if (listBox.SelectedIndex == -1 && mersennePrimeSeeker.MersennePrimeCount != 0)
-                        {
-                            var mersennePrime = mersennePrimeSeeker.MersennePrimes.Last();
-                            textBoxExplorationDate.Text = mersennePrime.explorationDate.ToString();
-                            textBoxTotalTime.Text = mersennePrime.totalTime.ToString();
-                            textBoxTestTime.Text = mersennePrime.testTime.ToString();
-                            textBoxExponent.Text = mersennePrime.exponent.ToString();
-                        }
-                    }
-                }));
-                Thread.Sleep(1000);
             }
         }
 
