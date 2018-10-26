@@ -1,5 +1,4 @@
-﻿using DLib.Math.Seeker;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace SearchForMersennePrimes
 {
     public partial class MainWindow : Window
     {
-        MersennePrime mersennePrimeSeeker;
+        DLib.Math.Seeker.MersennePrime.Local mersennePrimeSeeker;
         bool closing;
         const string savePath = @"C:\Users\dan24\OneDrive\Dokumente\Mathematik\Mersenne-Primzahlen\SFMPSaves";
 
@@ -20,7 +19,7 @@ namespace SearchForMersennePrimes
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             closing = false;
-            mersennePrimeSeeker = new MersennePrime();
+            mersennePrimeSeeker = new DLib.Math.Seeker.MersennePrime.Local();
             new Thread(() =>
             {
                 ulong totalPhysicalMemory = new Microsoft.VisualBasic.Devices.ComputerInfo().TotalPhysicalMemory;
@@ -58,7 +57,7 @@ namespace SearchForMersennePrimes
             }).Start();
             textBoxStartExponent.Text = "5";
             textBoxThreadCount.Text = Environment.ProcessorCount.ToString();
-            textBlockVersion.Text = MersennePrime.version;
+            textBlockVersion.Text = DLib.Math.Seeker.MersennePrime.Local.version;
             SetStoppedWindowMode();
             ReloadSaves();
         }
@@ -153,7 +152,7 @@ namespace SearchForMersennePrimes
             textBoxPrimeCount.Visibility = Visibility.Visible;
             buttonPauseContinue.IsEnabled = true;
             buttonDelete.IsEnabled = false;
-            textBoxSaveName.Text = DateTime.Now.ToString().Replace(":", "") + "v" + MersennePrime.version;
+            textBoxSaveName.Text = DateTime.Now.ToString().Replace(":", "") + "v" + DLib.Math.Seeker.MersennePrime.Local.version;
             buttonStartStop.Content = "Stop";
             buttonPauseContinue.Content = "Pause";
             buttonSaveLoad.Content = "Save";
